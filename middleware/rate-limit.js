@@ -1,4 +1,5 @@
 const rateLimit = require('express-rate-limit');
+const { ipKeyGenerator } = require('express-rate-limit');
 const AppError = require('../helpers/apperror');
 
 function toInt(value, fallback) {
@@ -29,8 +30,9 @@ const loginLimiter = createLimiter({
   windowMs: toInt(process.env.LOGIN_RATE_LIMIT_WINDOW_MS, 10 * 60 * 1000),
   max: toInt(process.env.LOGIN_RATE_LIMIT_MAX, 10),
   keyGenerator: (req) => {
+    const ipKey = ipKeyGenerator(req.ip || '');
     const email = String(req.body?.email || '').trim().toLowerCase();
-    return `${req.ip}|${email}`;
+    return `${ipKey}|${email}`;
   },
   code: 'E_RATE_LIMIT_LOGIN'
 });
@@ -45,8 +47,9 @@ const registerLimiter = createLimiter({
   windowMs: toInt(process.env.REGISTER_RATE_LIMIT_WINDOW_MS, 10 * 60 * 1000),
   max: toInt(process.env.REGISTER_RATE_LIMIT_MAX, 5),
   keyGenerator: (req) => {
+    const ipKey = ipKeyGenerator(req.ip || '');
     const email = String(req.body?.email || '').trim().toLowerCase();
-    return `${req.ip}|${email}`;
+    return `${ipKey}|${email}`;
   },
   code: 'E_RATE_LIMIT_REGISTER'
 });

@@ -12,7 +12,7 @@ const response = require('../helpers/response');
 const mail = require('../helpers/mail.helper');
 
 const REFRESH_COOKIE_NAME = process.env.REFRESH_COOKIE_NAME || 'refreshToken';
-const AUTH_COOKIE_PATH = process.env.AUTH_COOKIE_PATH || '/bck/at';
+const AUTH_COOKIE_PATH = process.env.AUTH_COOKIE_PATH || '/api/authen';
 const SESSION_EXPIRES_IN_DAYS = Number(process.env.SESSION_EXPIRES_IN_DAYS || 30);
 const REFRESH_TOKEN_EXPIRES_IN = process.env.REFRESH_TOKEN_EXPIRES_IN || '7d';
 

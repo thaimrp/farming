@@ -8,11 +8,11 @@ const {
   verifyLimiter
 } = require('../middleware/rate-limit');
 
-router.post('/rg', registerLimiter, authController.register);
+router.post('/register', registerLimiter, authController.register);
 router.get('/vf/:token', verifyLimiter, authController.verifyEmail);
-router.post('/li', loginLimiter, authController.login);
+router.post('/login', loginLimiter, authController.login);
 router.post('/rf', refreshLimiter, authController.refresh);
-router.post('/lo', authenticate, authController.logout);
+router.post('/logout', authenticate, authController.logout);
 router.post('/loa', authenticate, authController.logoutAll);
 router.post('/cpw', authenticate, authController.changePassword);
 router.get('/me', authenticate, authController.me);

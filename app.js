@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
@@ -31,12 +32,17 @@ app.use(enforceContentEncoding);
 app.use(express.json({ limit: jsonLimit, inflate: true }));
 app.use(express.urlencoded({ extended: false, limit: jsonLimit, inflate: true }));
 app.use(cookieParser());
+app.use(express.static(path.resolve(__dirname)));
 
 app.get('/bck/health', (req, res) => {
   res.status(200).json({ result: true, message: 'ok', data: null });
 });
 
-app.use('/bck/at', require('./routes/auth.routes'));
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'index.html'));
+});
+
+app.use('/api/authen', require('./routes/auth.routes'));
 app.use('/bck/cf', require('./routes/configuration.routes'));
 app.use('/bck/ct', require('./routes/configuration-type.routes'));
 app.use('/bck/mt', require('./routes/mapping-type.routes'));

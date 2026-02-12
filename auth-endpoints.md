@@ -1,10 +1,10 @@
 # Auth Endpoints
 
-Base URL: `/bck/at`
+Base URL: `/api/authen`
 
 ## 1) Register
 - Method: `POST`
-- Path: `/rg`
+- Path: `/register`
 - Auth: No
 - Rate limit: Yes
 
@@ -47,7 +47,7 @@ Success response (`200`):
 
 ## 3) Login
 - Method: `POST`
-- Path: `/li`
+- Path: `/login`
 - Auth: No
 - Rate limit: Yes
 
@@ -104,7 +104,7 @@ Success response (`200`):
 
 ## 5) Logout
 - Method: `POST`
-- Path: `/lo`
+- Path: `/logout`
 - Auth: Bearer token required
 
 Success response (`200`):
@@ -192,4 +192,4 @@ All errors use this format:
 ## Frontend notes
 1. Send `Authorization: Bearer <accessToken>` for protected endpoints.
 2. Enable `withCredentials: true` (or `credentials: 'include'`) for refresh/logout flows.
-3. Base auth route is short-form only (`/bck/at/*`).
+3. Base auth route is `/api/authen/*`.
