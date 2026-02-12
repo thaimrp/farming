@@ -14,8 +14,14 @@ function createLimiter({ windowMs, max, keyGenerator, code }) {
     standardHeaders: true,
     legacyHeaders: false,
     keyGenerator,
-    handler: (req, res, next) => {
-      next(new AppError('Too many requests, please try again later.', 429, code || 'E_RATE_LIMIT'));
+    handler: (req, res) => {
+      const err = new AppError('Too many requests, please try again later.', 429, code || 'E_RATE_LIMIT');
+      res.status(429).json({
+        result: false,
+        code: err.errorCode || 'E_RATE_LIMIT',
+        message: err.message,
+        data: null
+      });
     }
   });
 }

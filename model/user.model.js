@@ -88,17 +88,17 @@ userSchema.virtual('password').set(function setPassword(password) {
   this._password = password;
 });
 
-userSchema.pre('save', async function preSave(next) {
-  if (!this._password) return next();
+userSchema.pre('validate', async function preValidate() {
+  if (!this._password) return;
 
   if (typeof this._password !== 'string' || this._password.length < 8) {
-    return next(new Error('Password must be at least 8 characters'));
+    throw new Error('Password must be at least 8 characters');
   }
 
   const salt = await bcrypt.genSalt(12);
   this.passwordHash = await bcrypt.hash(this._password, salt);
   this.passwordChangedAt = new Date();
-  return next();
+  return;
 });
 
 userSchema.methods.comparePassword = function comparePassword(candidatePassword) {

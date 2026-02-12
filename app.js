@@ -23,8 +23,25 @@ app.use(helmet());
 app.use(globalLimiter);
 app.use(requestLog);
 
+const allowedOrigins = new Set(
+  (process.env.CORS_ORIGIN || '')
+    .split(',')
+    .map((v) => v.trim())
+    .filter(Boolean)
+);
+
+function isLocalDevOrigin(origin = '') {
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
+}
+
 app.use(cors({
-  origin: (process.env.CORS_ORIGIN || '').split(',').map((v) => v.trim()).filter(Boolean),
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.has(origin) || isLocalDevOrigin(origin)) {
+      return callback(null, true);
+    }
+    return callback(new AppError('CORS origin not allowed', 403, 'E_CORS_ORIGIN_DENIED'));
+  },
   credentials: true
 }));
 app.use(compression());
@@ -73,7 +90,7 @@ app.use((err, req, res, next) => {
     result: false,
     code,
     message,
-    data: null
+    data: !isProd ? { stack: err.stack } : null
   });
 });
 
